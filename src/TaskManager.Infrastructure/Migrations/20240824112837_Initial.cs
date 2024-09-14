@@ -21,7 +21,7 @@ namespace TaskManager.Infrastructure.Migrations
                     description = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     deadline = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    completed_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    completed_date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     created_by = table.Column<string>(type: "text", nullable: true),
                     created_on_utc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     last_modified_by = table.Column<string>(type: "text", nullable: true),

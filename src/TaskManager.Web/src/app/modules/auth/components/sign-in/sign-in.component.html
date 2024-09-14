@@ -1,0 +1,29 @@
+<div class="card mt-5 mx-auto form-width">
+    <div class="card-body">
+        <form [formGroup]="signInForm" (submit)="onSubmit()">
+            <legend>Вход</legend>
+            <div class="mb-3 form-floating">
+                <input type="email" class="form-control" id="email" placeholder="Адрес электронной почты" formControlName="email" maxlength="30">
+                <label for="email">Адрес электронной почты</label>
+                <span *ngIf="!email.valid && email.touched" class="error-block">
+                    <span *ngIf="email.hasError('required')">Введите адрес электронной почты</span>
+                    <span *ngIf="email.hasError('email')">Введён некорректный адрес</span>
+                </span>
+            </div>
+            <div class="mb-3 form-floating">
+                <input type="password" class="form-control" id="password" placeholder="Пароль" formControlName="password" maxlength="15">
+                <label for="password">Пароль</label>
+                <span *ngIf="!password.valid && password.touched" class="error-block">
+                    <span *ngIf="password.hasError('required')">Введите пароль</span>
+                    <span *ngIf="password.hasError('minlength')">Пароль слишком короткий</span>
+                </span>
+            </div>
+            <div id="collapseBasic" class="mb-3" [collapse]="errorMessage == null" [isAnimated]="true">
+                <div class="well well-lg card card-body error-message">{{errorMessage}}</div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Войти</button>
+            </div>
+        </form>
+    </div>
+</div>

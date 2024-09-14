@@ -1,0 +1,13 @@
+/* Перенести куда-нибудь эти стили, чтобы они использовались другими компонентами */
+
+.sign-in-w {
+    width: 500px;
+}
+
+.form-floating > label::after {
+    background-color: transparent;
+}
+
+.error-message {
+    background-color: #660000;
+}

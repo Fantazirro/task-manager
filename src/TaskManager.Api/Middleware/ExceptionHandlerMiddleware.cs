@@ -17,8 +17,6 @@ namespace TaskManager.Api.Middleware
         {
             _logger.LogError($"Exception occured: {exception.Message}");
 
-            var errors = new List<string>() { exception.Message };
-
             switch (exception)
             {
                 case BadRequestException _:
@@ -32,7 +30,7 @@ namespace TaskManager.Api.Middleware
                     break;
             }
 
-            await httpContext.Response.WriteAsJsonAsync(errors);
+            await httpContext.Response.WriteAsync(exception.Message);
 
             return true;
         }

@@ -1,0 +1,33 @@
+<div class="card mt-5 mx-auto form-width">
+    <div class="card-body">
+        <form [formGroup]="signUpForm" (submit)="onSubmit()">
+            <legend>Регистрация</legend>
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" id="username" placeholder="Имя" formControlName="username" maxlength="30">
+                <label for="username">Имя</label>
+                <span *ngIf="!username.valid && username.touched" class="error-block">
+                    <span *ngIf="username.hasError('required')">Введите имя</span>
+                </span>
+            </div>
+            <div class="mb-3 form-floating">
+                <input type="email" class="form-control" id="email" placeholder="Адрес электронной почты" formControlName="email" maxlength="30">
+                <label for="email">Адрес электронной почты</label>
+                <span *ngIf="!email.valid && email.touched" class="error-block">
+                    <span *ngIf="email.hasError('required')">Введите адрес электронной почты</span>
+                    <span *ngIf="email.hasError('email')">Введён некорректный адрес</span>
+                </span>
+            </div>
+            <div class="mb-3 form-floating">
+                <input type="password" class="form-control" id="password" placeholder="Пароль" formControlName="password" maxlength="15">
+                <label for="password">Пароль</label>
+                <span *ngIf="!password.valid && password.touched" class="error-block">
+                    <span *ngIf="password.hasError('required')">Введите пароль</span>
+                    <span *ngIf="password.hasError('minlength')">Пароль слишком короткий</span>
+                </span>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Создать аккаунт</button>
+            </div>
+        </form>
+    </div>
+</div>

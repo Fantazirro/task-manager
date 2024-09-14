@@ -13,6 +13,7 @@ builder.Services.ConfigureInfrastructureServices();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
 
 builder.Services.ConfigureOptions<MvcOptionsSetup>();
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
@@ -31,6 +32,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(builder => builder
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 app.UseCustomExceptionHandler();
 app.UseHttpsRedirection();
 app.UseAuthentication();

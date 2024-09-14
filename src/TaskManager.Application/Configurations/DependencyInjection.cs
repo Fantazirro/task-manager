@@ -12,8 +12,8 @@ namespace TaskManager.Application.Configurations
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddValidatorsFromAssembly(Assembly.Load("TaskManager.Application"), includeInternalTypes: true);
 
-            services.AddScoped<UserTaskService>();
-            services.AddScoped<UserService>();
+            services.AddScoped<TaskService>();
+            services.AddScoped<AuthService>();
 
             return services;
         }

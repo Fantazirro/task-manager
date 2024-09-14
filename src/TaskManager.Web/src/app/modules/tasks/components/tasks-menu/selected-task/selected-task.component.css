@@ -1,0 +1,25 @@
+.current-task-text {
+    background: transparent;
+    border-width: 0;
+    border: 2px solid #414550;
+    border-radius: 10px;
+}
+
+.current-task-text:focus {
+    outline: none;
+}
+
+input.current-task-text {
+    width: auto;
+    font-size: 14pt;
+}
+
+textarea.current-task-text {
+    resize: none;
+    width: 100%;
+    height: 100%;
+}
+
+.card-header {
+    height: 60px;
+}

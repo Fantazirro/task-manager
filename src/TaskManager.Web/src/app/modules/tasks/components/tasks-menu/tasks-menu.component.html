@@ -1,0 +1,30 @@
+<nav class="navbar mt-3">
+    <h2>Задачи</h2>
+    <div class="d-flex">
+        <button class="btn btn-outline-success" type="submit" (click)="newTask()">Новая задача</button>
+    </div>
+</nav>
+<hr class="mt-0" />
+
+<div class="row" style="height: 79vh;">
+    <div class="col gap-4" id="tasks-scroll" style="height: 100%; overflow-y: scroll;">
+        <div class="row">
+            <div class="d-flex flex-column gap-3">
+                <div class="card btn task" *ngFor="let task of tasks; let i = index;" (click)="selectTask(i)">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ task.header }}</h5>
+                        <p class="card-text truncate"> {{ task.description }} </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <app-selected-task
+            [currentTask]="currentTask"
+            (onAddTask)="addTask($event)"
+            (onDeleteTask)="deleteTask($event)"
+            (onUpdateTask)="updateTask($event)">
+        </app-selected-task>
+    </div>
+</div>

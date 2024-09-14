@@ -1,0 +1,15 @@
+.form-width {
+    max-width: 500px;
+}
+
+.form-floating > label::after {
+    background-color: transparent;
+}
+
+.ng-invalid.ng-touched {
+    border-color: red;
+}
+
+.error-block {
+    color: red;
+}

@@ -1,0 +1,7 @@
+.sign-up-w {
+    width: 500px;
+}
+
+.form-floating > label::after {
+    background-color: transparent;
+}

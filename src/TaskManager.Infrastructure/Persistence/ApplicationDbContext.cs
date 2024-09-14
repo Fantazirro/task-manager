@@ -8,6 +8,6 @@ namespace TaskManager.Infrastructure.Persistence
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<UserTask> Tasks { get; set; }
+        public DbSet<TaskEntity> Tasks { get; set; }
     }
 }

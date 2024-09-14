@@ -33,7 +33,7 @@ namespace TaskManager.Infrastructure.Configurations
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserTaskRepository, UserTaskRepository>();           
+            services.AddScoped<ITaskRepository, TaskRepository>();           
 
             return services;
         }

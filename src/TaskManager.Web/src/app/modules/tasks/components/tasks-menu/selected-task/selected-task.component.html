@@ -1,0 +1,26 @@
+<div class="card" style="height: 100%;" *ngIf="!isEditMode">
+    <div class="card-header navbar">
+        <h3>{{ currentTask?.task?.header }}</h3>
+        <div class="d-flex justify-content-end gap-2">
+            <button class="btn btn-primary" (click)="editModeOn()">Edit</button>
+            <button class="btn btn-danger" (click)="deleteTask()">Delete</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <p>{{ currentTask?.task?.description }}</p>
+    </div>
+</div>
+
+<form class="card" style="height: 100%;" [formGroup]="taskForm" (submit)="false" *ngIf="isEditMode">
+    <div class="card-header navbar">
+        <input type="text" class="current-task-text" formControlName="header">
+        <div class="d-flex justify-content-end gap-2">
+            <button class="btn btn-success" (click)="saveChanges()">Save</button>
+            <button class="btn btn-danger" (click)="editModeOff()">Cancel</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <textarea class="current-task-text" formControlName="description">
+        </textarea>
+    </div>
+</form>

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TaskManager.Application.Interfaces.Data;
-using TaskManager.Domain.Common;
+﻿using TaskManager.Application.Interfaces.Data;
 using TaskManager.Infrastructure.Persistence.Repositories;
 
 namespace TaskManager.Infrastructure.Persistence
@@ -9,7 +7,7 @@ namespace TaskManager.Infrastructure.Persistence
     {
         private readonly ApplicationDbContext _dbContext;
 
-        private IUserTaskRepository _userTaskRepository = null!;
+        private ITaskRepository _taskRepository = null!;
         private IUserRepository _userRepository = null!;
 
         public UnitOfWork(ApplicationDbContext dbContext)
@@ -17,8 +15,8 @@ namespace TaskManager.Infrastructure.Persistence
             _dbContext = dbContext;
         }
 
-        public IUserTaskRepository UserTaskRepository =>
-            _userTaskRepository ??= new UserTaskRepository(_dbContext);
+        public ITaskRepository TaskRepository =>
+            _taskRepository ??= new TaskRepository(_dbContext);
 
         public IUserRepository UserRepository =>
             _userRepository ??= new UserRepository(_dbContext);
