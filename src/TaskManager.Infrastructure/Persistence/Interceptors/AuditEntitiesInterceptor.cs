@@ -12,9 +12,12 @@ namespace TaskManager.Infrastructure.Persistence.Interceptors
 
         public AuditEntitiesInterceptor(IHttpContextAccessor httpContextAccessor)
         {
-            var context = httpContextAccessor.HttpContext;
-            var userNameClaim = context!.User.FindFirst(JwtRegisteredClaimNames.Name);
-            _userName = userNameClaim is null ? null : userNameClaim.Value;
+            var httpContext = httpContextAccessor.HttpContext;
+            if (httpContext is not null)
+            {
+                var userNameClaim = httpContext.User.FindFirst(JwtRegisteredClaimNames.Name);
+                _userName = userNameClaim is null ? null : userNameClaim.Value;
+            }
         }
 
         public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
@@ -30,7 +33,7 @@ namespace TaskManager.Infrastructure.Persistence.Interceptors
 
             var entries = dbContext.ChangeTracker.Entries<IAuditable>();
 
-            foreach(var entry in entries )
+            foreach(var entry in entries)
             {
                 if (entry.State == EntityState.Added)
                 {

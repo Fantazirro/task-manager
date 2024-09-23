@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { SignInData } from '../../../../shared/models/auth/sign-in.model';
-import { catchError } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +11,6 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent {
     signInForm: FormGroup;
-
     errorMessage: string | null = null;
 
     constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router) {
@@ -23,6 +21,8 @@ export class SignInComponent {
     }
 
     onSubmit() : void {
+        if (!this.signInForm.valid) return;
+
         let signInData: SignInData = this.signInForm.getRawValue();
         this.auth.signIn(signInData).subscribe({
             next: () =>{

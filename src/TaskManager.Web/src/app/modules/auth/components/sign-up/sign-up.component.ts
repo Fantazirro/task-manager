@@ -21,6 +21,8 @@ export class SignUpComponent {
     }
 
     onSubmit() : void {
+        if (!this.signUpForm.valid) return;
+
         let signUpData: SignUpData = this.signUpForm.getRawValue();
         this.auth.signUp(signUpData).subscribe({
             next: () => {

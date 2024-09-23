@@ -1,7 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Task, TaskStatus } from '../../models/task.model';
-import { TasksListItem } from '../../models/tasks-list-item.model';
-import { SelectedTaskComponent } from './selected-task/selected-task.component';
 import { TaskService } from '../../services/task.service';
 
 @Component({
@@ -10,48 +8,40 @@ import { TaskService } from '../../services/task.service';
     styleUrls: ['./tasks-menu.component.css']
 })
 export class TasksMenuComponent implements OnInit {
-    tasks: Task[] = [];
-    currentTask?: TasksListItem = undefined;
+    constructor(private taskService: TaskService) {
 
-    @ViewChild(SelectedTaskComponent) selectedTaskCmp?: SelectedTaskComponent;
+    }
 
-    constructor(private taskService: TaskService) { }
+    get tasks() {
+        return this.taskService.tasks;
+    }
 
     ngOnInit(): void {
-        this.taskService.getAllTasks().subscribe({
-            next: (response) => {
-                this.tasks = response;
-            }
-        });
+        this.taskService.getTasks();
     }
 
     selectTask(index: number) {
-        if (!this.selectedTaskCmp?.isEditMode) {
-            this.currentTask = {
-                index: index,
-                task: this.tasks[index]
-            };
+        this.taskService.selectTask(index);
+    }
+
+    addTask() {
+        this.taskService.addTask();
+    }
+
+    isCompleted(task: Task) {
+        return task.status == TaskStatus.Completed;
+    }
+
+    changeTaskStatus(task: Task) {
+        if (this.taskService.isEditMode) return;
+
+        if (task.status == TaskStatus.InProgress) {
+            this.taskService.changeTaskStatus(task, TaskStatus.Completed);
+            task.status = TaskStatus.Completed;
         }
-    }
-
-    newTask() {
-        this.selectedTaskCmp?.addTask();
-    }
-
-    addTask(task: Task) {
-        this.tasks.unshift(task);
-        this.currentTask = {
-            index: 0,
-            task: task
-        };
-    }
-
-    deleteTask(index: number) {
-        this.tasks.splice(index, 1);
-    }
-
-    updateTask(task: Task) {
-        this.currentTask!.task = task;
-        this.tasks[this.currentTask!.index] = task;
+        else {
+            this.taskService.changeTaskStatus(task, TaskStatus.InProgress);
+            task.status =TaskStatus.InProgress;
+        }
     }
 }

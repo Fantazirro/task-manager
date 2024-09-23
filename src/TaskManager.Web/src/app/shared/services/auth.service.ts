@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { SignUpData } from '../models/auth/sign-up.model';
 import { baseUrl } from 'src/app/shared/constants/environment';
 import { JwtResponse } from '../models/auth/jwt-response.model';
-import { map } from 'rxjs';
+import { catchError, map } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'

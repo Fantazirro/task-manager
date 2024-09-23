@@ -1,37 +1,103 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { baseUrl } from 'src/app/shared/constants/environment';
-import { AddTaskRequest, Task, UpdateTaskRequest } from '../models/task.model';
+import { EventEmitter, Injectable, Output } from '@angular/core';
+import { TaskHttpService } from './task-http.service';
+import { AddTaskRequest, Task, TaskStatus, UpdateTaskRequest } from '../models/task.model';
+import { TasksListItem } from '../models/tasks-list-item.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TaskService {
-    private url = baseUrl + '/tasks';
+    tasks: Task[] = [];
+    currentTask?: TasksListItem = undefined;
 
-    constructor(private http: HttpClient) { }
+    isEditMode: boolean = false;
+    isNewTask: boolean = false;
 
-    getTask(id: string) {
-        return this.http.get<Task>(`${this.url}/${id}`);
+    @Output() onEditMode = new EventEmitter<boolean>();
+
+    constructor(private taskHttpService: TaskHttpService) { }
+
+    selectTask(index: number) {
+        if (!this.isEditMode) {
+            this.currentTask = {
+                index: index,
+                task: this.tasks[index]
+            };
+        }
     }
 
-    getAllTasks() {
-        return this.http.get<Task[]>(this.url);
+    getTasks() {
+        this.taskHttpService.getAllTasks().subscribe({
+            next: (response) => {
+                this.tasks = response;
+            }
+        });
     }
 
-    getHistory() {
-        return this.http.get<Task[]>(`${this.url}/history`);
+    addTask() {
+        this.currentTask = undefined;
+        this.isNewTask = true;
+        this.isEditMode = true;
     }
 
-    addTask(data: AddTaskRequest) {
-        return this.http.post<Task>(this.url, data);
+    saveTask(task: AddTaskRequest) {
+        this.taskHttpService.addTask(task).subscribe({
+            next: (response) => {
+                this.tasks.unshift(response);
+                this.currentTask = {
+                    index: 0,
+                    task: response
+                };
+            }
+        });
     }
 
-    updateTask(data: UpdateTaskRequest) {
-        return this.http.put<Task>(this.url, data);
+    updateTask(task: UpdateTaskRequest) {
+        this.taskHttpService.updateTask(task).subscribe({
+            next: (response) => {
+                this.currentTask!.task = response;
+                this.tasks[this.currentTask!.index] = response;
+            }
+        });
     }
 
-    deleteTask(id: string) {
-        return this.http.delete(`${this.url}/${id}`);
+    deleteTask() {
+        this.taskHttpService.deleteTask(this.currentTask!.task.id).subscribe({
+            next: () => {
+                this.tasks.splice(this.currentTask!.index, 1);
+                this.currentTask = undefined;
+            }
+        });
+    }
+
+    changeTaskStatus(task: Task, status: TaskStatus) {
+        let updatedTask: UpdateTaskRequest = {
+            id: task.id,
+            header: task.header,
+            description: task.description,
+            status: status,
+            deadline: task.deadline
+        };
+        this.taskHttpService.updateTask(updatedTask).subscribe();
+    }
+
+    taskToHistory() {
+        this.currentTask!.task.status = TaskStatus.InHistory;
+        this.taskHttpService.updateTask(this.currentTask!.task).subscribe({
+            next: () => {
+                this.currentTask = undefined;
+            }
+        });
+    }
+
+    editModeOn() {
+        this.isEditMode = true;
+        this.onEditMode.emit(true);
+    }
+
+    editModeOff() {
+        this.isEditMode = false;
+        this.isNewTask = false;
+        this.onEditMode.emit(false);
     }
 }

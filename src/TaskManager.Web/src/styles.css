@@ -6,10 +6,16 @@
     background-color: transparent;
 }
 
-.ng-invalid.ng-touched {
+input.ng-invalid.ng-touched {
     border-color: red;
 }
 
 .error-block {
     color: red;
+}
+
+.tooltip {
+    --bs-tooltip-bg: black;
+    --bs-tooltip-color: white;
+    --bs-tooltip-opacity: .8;
 }

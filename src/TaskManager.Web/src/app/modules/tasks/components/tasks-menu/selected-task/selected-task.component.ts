@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AddTaskRequest, Task, TaskStatus, UpdateTaskRequest } from '../../../models/task.model';
+import { Component, TemplateRef } from '@angular/core';
+import { AddTaskRequest, TaskStatus, UpdateTaskRequest } from '../../../models/task.model';
 import { TaskService } from '../../../services/task.service';
-import { TasksListItem } from '../../../models/tasks-list-item.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
     selector: 'app-selected-task',
@@ -10,104 +10,106 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
     styleUrls: ['./selected-task.component.css']
 })
 export class SelectedTaskComponent {
-    isEditMode: boolean = false;
-    isNewTask: boolean = false;
-
     taskForm: FormGroup;
+    deleteModalRef?: BsModalRef;
 
-    @Input() currentTask?: TasksListItem = undefined;
-
-    @Output() onAddTask = new EventEmitter<Task>();
-    @Output() onDeleteTask = new EventEmitter<number>();
-    @Output() onUpdateTask = new EventEmitter<Task>();
-
-    constructor(private taskService: TaskService, private formBuilder: FormBuilder) {
+    constructor(
+        private taskService: TaskService,
+        private formBuilder: FormBuilder,
+        private modalService: BsModalService) {
         this.taskForm = this.formBuilder.group({
-            header: ['', [Validators.maxLength(30)]],
-            description: ['', [Validators.maxLength(500)]]
+            header: ['', [Validators.required, Validators.maxLength(50)]],
+            description: ['', [Validators.maxLength(2000)]],
+            deadline: [null]
         });
     }
 
+    get currentTask() {
+        return this.taskService.currentTask?.task;
+    }
+
+    get isEditMode() {
+        return this.taskService.isEditMode;
+    }
+
+    get isNewTask() {
+        return this.taskService.isNewTask;
+    }
+
     editModeOn() {
-        this.isEditMode = true;
+        this.taskService.editModeOn();
         this.taskForm.setValue({
-            header: this.currentTask?.task.header,
-            description: this.currentTask?.task.description
+            header: this.currentTask!.header,
+            description: this.currentTask!.description,
+            deadline: null
         });
     }
 
     editModeOff() {
-        this.isEditMode = false;
-        this.isNewTask = false;
+        this.taskService.editModeOff();
         this.taskForm.setValue({
             header: '',
-            description: ''
+            description: '',
+            deadline: null
         });
     }
 
     saveChanges() {
-        if (this.isNewTask) this.saveTask();
+        if (!this.taskForm.valid) return;
+
+        if (this.taskService.isNewTask) this.saveTask();
         else this.updateTask();
+
+        this.editModeOff();
     }
 
     addTask() {
-        this.currentTask = undefined;
-        this.isNewTask = true;
-        this.editModeOn();
+        this.taskService.addTask();
     }
 
     saveTask() {
         let newTask: AddTaskRequest = this.taskForm.getRawValue();
-        this.taskService.addTask(newTask).subscribe({
-            next: (response) => {
-                this.editModeOff();
-                this.onAddTask.emit(response);
-            }
-        });
+        this.taskService.saveTask(newTask);
+    }
+
+    showDeleteModal(modal: TemplateRef<void>) {
+        this.deleteModalRef = this.modalService.show(modal);
     }
 
     deleteTask() {
-        this.taskService.deleteTask(this.currentTask!.task.id).subscribe({
-            next: () => {
-                this.onDeleteTask.emit(this.currentTask?.index);
-                this.currentTask = undefined;
-            }
-        });
+        this.deleteModalRef?.hide();
+        this.taskService.deleteTask();
     }
 
     updateTask() {
         let updatedTask: UpdateTaskRequest = {
-            id: this.currentTask!.task.id,
-            header: this.taskForm.get('header')?.value,
-            description: this.taskForm.get('description')?.value,
-            status: this.currentTask!.task.status,
-            deadline: this.currentTask!.task.deadline
+            id: this.currentTask!.id,
+            header: this.currentTask!.header,
+            description: this.currentTask!.description,
+            status: this.currentTask!.status,
+            deadline: this.currentTask!.deadline
         };
-        this.taskService.updateTask(updatedTask).subscribe({
-            next: (response) => {
-                this.editModeOff();
-                this.onUpdateTask.emit(response);
-            }
-        });
+
+        if (this.taskService.isEditMode) {
+            updatedTask.header = this.taskForm.get('header')?.value;
+            updatedTask.description = this.taskForm.get('description')?.value;
+            updatedTask.deadline = this.taskForm.get('deadline')?.value;
+        }
+
+        this.taskService.updateTask(updatedTask);
     }
 
     completeTask() {
-        this.currentTask!.task.status = TaskStatus.Completed;
+        this.currentTask!.status = TaskStatus.Completed;
         this.updateTask();
     }
 
     uncompleteTask() {
-        this.currentTask!.task.status = TaskStatus.InProgress;
+        this.currentTask!.status = TaskStatus.InProgress;
         this.updateTask();
     }
 
     taskToHistory() {
-        this.currentTask!.task.status = TaskStatus.InHistory;
-        this.taskService.updateTask(this.currentTask!.task).subscribe({
-            next: () => {
-                this.onDeleteTask.emit(this.currentTask?.index);
-                this.currentTask = undefined;
-            }
-        });
+        this.taskService.taskToHistory();
     }
 }

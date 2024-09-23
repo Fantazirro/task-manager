@@ -22,8 +22,8 @@ namespace TaskManager.Api.Controllers
             var validationResult = validator.Validate(signInRequest);
             if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
-            var signInViewModel = await _userService.SignIn(signInRequest);
-            return Ok(signInViewModel);
+            var signInResponse = await _userService.SignIn(signInRequest);
+            return Ok(signInResponse);
         }
 
         [HttpPost("sign-up")]

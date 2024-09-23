@@ -13,17 +13,22 @@
     border-radius: 5px;
 }
 
-.truncate {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .task {
     text-align: left;
     padding: 0px;
+    cursor: default;
 }
 
 .task:hover {
     border-color: #708099;
+}
+
+.complete-button {
+    position: absolute;
+    right: calc(10px + var(--bs-card-border-radius));
+    top: calc(50% - 15px);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #16191B;
 }

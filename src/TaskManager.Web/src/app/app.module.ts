@@ -13,6 +13,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
+import { DisableButtonsInterceptor } from './shared/interceptors/disable-buttons.interceptor';
 
 @NgModule({
     declarations: [
@@ -31,6 +32,7 @@ import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
         ReactiveFormsModule
     ],
     providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: DisableButtonsInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
     ],
     bootstrap: [AppComponent]
