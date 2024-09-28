@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TaskManager.Application.Dtos.Auth;
+using TaskManager.Application.UseCases.Auth;
 
 namespace TaskManager.Application.Validators.Auth
 {
-    public class SignInRequestValidator : AbstractValidator<SignInRequest>
+    public class SignInRequestValidator : AbstractValidator<SignIn.Request>
     {
         public SignInRequestValidator()
         {

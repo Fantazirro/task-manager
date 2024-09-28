@@ -22,58 +22,14 @@ namespace TaskManager.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TaskManager.Domain.Entities.User", b =>
+            modelBuilder.Entity("TaskManager.Domain.Entities.TaskEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("text")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTimeOffset>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("text")
-                        .HasColumnName("last_modified_by");
-
-                    b.Property<DateTimeOffset>("LastModifiedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_modified_on_utc");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("password_hash");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_users");
-
-                    b.ToTable("users", (string)null);
-                });
-
-            modelBuilder.Entity("TaskManager.Domain.Entities.UserTask", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTimeOffset>("CompletedDate")
+                    b.Property<DateTimeOffset?>("CompletedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("completed_date");
 
@@ -119,6 +75,50 @@ namespace TaskManager.Infrastructure.Migrations
                         .HasName("pk_tasks");
 
                     b.ToTable("tasks", (string)null);
+                });
+
+            modelBuilder.Entity("TaskManager.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text")
+                        .HasColumnName("created_by");
+
+                    b.Property<DateTimeOffset>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_on_utc");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text")
+                        .HasColumnName("last_modified_by");
+
+                    b.Property<DateTimeOffset>("LastModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_modified_on_utc");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.ToTable("users", (string)null);
                 });
 #pragma warning restore 612, 618
         }

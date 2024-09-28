@@ -1,6 +1,6 @@
 ﻿using TaskManager.Domain.Enums;
 
-namespace TaskManager.Application.Dtos.Tasks
+namespace TaskManager.Application.Models.Tasks
 {
     public class TaskResponse
     {

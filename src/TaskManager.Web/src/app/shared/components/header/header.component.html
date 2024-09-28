@@ -7,7 +7,7 @@
         </div>
         <div class="btn-group" dropdown *ngIf="isAuthenticated">
             <button id="button-animated" dropdownToggle type="button" class="btn dropdown-toggle"
-                aria-controls="dropdown-animated">Аккаунт <span class="caret"></span>
+                aria-controls="dropdown-animated">{{ username }}<span class="caret"></span>
             </button>
             <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu" role="menu"
                 aria-labelledby="button-animated">

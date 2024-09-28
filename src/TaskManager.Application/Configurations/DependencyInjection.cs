@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using TaskManager.Application.Services;
+using TaskManager.Application.Interfaces.Common;
 
 namespace TaskManager.Application.Configurations
 {
@@ -12,8 +12,11 @@ namespace TaskManager.Application.Configurations
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddValidatorsFromAssembly(Assembly.Load("TaskManager.Application"), includeInternalTypes: true);
 
-            services.AddScoped<TaskService>();
-            services.AddScoped<AuthService>();
+            var useCases = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.GetInterfaces().Contains(typeof(IUseCase)));
+
+            foreach (var useCase in useCases) 
+                services.AddScoped(useCase);
 
             return services;
         }

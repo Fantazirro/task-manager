@@ -14,10 +14,12 @@ export class HeaderComponent implements OnDestroy {
     private authEvent: Subscription | null = null;
 
     isAuthenticated : boolean = true;
+    username?: string;
 
     constructor(private auth: AuthService, private router: Router) {
         this.isAuthenticated = auth.isAuthenticated();
         this.authEvent = auth.onAuthenticated.subscribe(isAuth => this.isAuthenticated = isAuth);
+        this.username = this.auth.getUser()?.userName;
     }
 
     ngOnDestroy(): void {

@@ -6,11 +6,11 @@
     <div class="card-header navbar">
         <h3>{{ currentTask.header }}</h3>
         <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn p-0" (click)="editModeOn()" tooltip="Редактировать">
+            <button type="button" class="btn p-0" (click)="editModeOn()" title="Редактировать">
                 <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14 6L8 12V16H12L18 10M14 6L17 3L21 7L18 10M14 6L18 10M10 4L4 4L4 20L20 20V14" stroke="#7080BB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg></button>
-            <button type="button" class="btn async-disable p-0" (click)="showDeleteModal(deleteModal)" tooltip="Удалить">
+            <button type="button" class="btn async-disable p-0" (click)="showDeleteModal(deleteModal)" title="Удалить">
                 <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16" stroke="#AA0000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -20,7 +20,7 @@
     <div class="card-body">
         <pre style="height: 94%;">{{ currentTask.description }}</pre>
         <div *ngIf="currentTask.deadline">
-            <svg height="30px" width="30px" fill="#FF7700" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
+            <svg height="25px" width="25px" fill="#FF7700" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve">
                 <g>
                     <path class="st0"
@@ -70,12 +70,12 @@
     <div class="card-header navbar">
         <input type="text" class="current-task-text form-control" maxlength="50" placeholder="Задача" formControlName="header">
         <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn p-0 async-disable" (click)="saveChanges()" tooltip="Сохранить">
+            <button type="button" class="btn p-0 async-disable" (click)="saveChanges()" title="Сохранить">
                 <svg fill="#008800" width="30px" height="30px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path id="save" class="cls-1" d="M1522,360h-20a2,2,0,0,1-2-2V338a2,2,0,0,1,2-2h15v0.006a1.016,1.016,0,0,1,.77.283l5.91,5.911a1.017,1.017,0,0,1,.29.8H1524v15A2,2,0,0,1,1522,360Zm-15-2h10v-7h-10v7Zm8-20h-6v6h6v-6Zm7,5.477-5-5V344a2,2,0,0,1-2,2h-6a2,2,0,0,1-2-2v-6h-5v20h3v-7a2,2,0,0,1,2-2h10a2,2,0,0,1,2,2v7h3V343.477Z" transform="translate(-1500 -336)"/>
                 </svg>
             </button>
-            <button type="button" class="btn p-0" (click)="editModeOff()" tooltip="Отмена">
+            <button type="button" class="btn p-0" (click)="editModeOff()" title="Отмена">
                 <svg fill="#BB0000" height="30px" width="30px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 392.619 392.619" xml:space="preserve">
                     <g>
                         <path d="M310.724,0.929H81.896C36.738,0.929,0,37.667,0,82.825v226.969c0,45.158,36.738,81.896,81.896,81.896h228.828

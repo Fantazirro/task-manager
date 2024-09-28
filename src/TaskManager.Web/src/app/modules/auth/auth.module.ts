@@ -5,11 +5,13 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { SendCodeComponent } from './components/sign-up/send-code/send-code.component';
 
 @NgModule({
   declarations: [
     SignUpComponent,
-    SignInComponent
+    SignInComponent,
+    SendCodeComponent,
   ],
   imports: [
     CommonModule,

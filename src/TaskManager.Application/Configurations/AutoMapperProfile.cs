@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using TaskManager.Application.Dtos.Auth;
-using TaskManager.Application.Dtos.Tasks;
+using TaskManager.Application.Models.Tasks;
+using TaskManager.Application.UseCases.Auth;
+using TaskManager.Application.UseCases.Tasks;
+using TaskManager.Application.UseCases.Users;
 using TaskManager.Domain.Entities;
 
 namespace TaskManager.Application.Configurations
@@ -9,11 +11,13 @@ namespace TaskManager.Application.Configurations
     {
         public AutoMapperProfile()
         {
-            CreateMap<AddTaskRequest, TaskEntity>();
-            CreateMap<UpdateTaskRequest, TaskEntity>();
+            CreateMap<AddTask.Request, TaskEntity>();
+            CreateMap<UpdateTask.Request, TaskEntity>();
             CreateMap<TaskEntity, TaskResponse>();
 
-            CreateMap<SignUpRequest, User>();
+            CreateMap<SignUp.Request, User>();
+
+            CreateMap<User, GetUserById.Response>();
         }
     }
 }

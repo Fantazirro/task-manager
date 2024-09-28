@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using TaskManager.Application.Dtos.Auth;
-using TaskManager.Application.Services;
+using TaskManager.Application.UseCases.Auth;
 
 namespace TaskManager.Api.Controllers
 {
@@ -9,31 +8,46 @@ namespace TaskManager.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService _userService;
-
-        public AuthController(AuthService userService)
-        {
-            _userService = userService;
-        }
-
         [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn([FromBody] SignInRequest signInRequest, IValidator<SignInRequest> validator)
+        public async Task<IActionResult> SignIn([FromBody] SignIn.Request request, SignIn useCase, IValidator<SignIn.Request> validator)
         {
-            var validationResult = validator.Validate(signInRequest);
+            var validationResult = validator.Validate(request);
             if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
-            var signInResponse = await _userService.SignIn(signInRequest);
+            var signInResponse = await useCase.Handle(request);
             return Ok(signInResponse);
         }
 
         [HttpPost("sign-up")]
-        public async Task<IActionResult> SignUp([FromBody] SignUpRequest signUpRequest, IValidator<SignUpRequest> validator)
+        public async Task<IActionResult> SignUp(
+            [FromBody] SignUp.Request request,
+            [FromQuery] int code,
+            SignUp signUpUseCase,
+            ConfirmEmail confirmEmailUseCase,
+            IValidator<SignUp.Request> validator)
         {
-            var validationResult = validator.Validate(signUpRequest);
+            var validationResult = validator.Validate(request);
             if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
-            await _userService.SignUp(signUpRequest);
+            var success = await confirmEmailUseCase.Handle(new(request.Email, code));
+            if (!success) return BadRequest("Неверный код");
+
+            var signUpResponse = await signUpUseCase.Handle(request);
+            return Ok(signUpResponse);
+        }
+
+        [HttpPost("send-code")]
+        public async Task<IActionResult> SendCode([FromQuery] string email, SendCode useCase)
+        {
+            await useCase.Handle(email);
             return Ok();
+        }
+
+        [HttpGet("check-email")]
+        public async Task<IActionResult> CheckEmail([FromQuery] string email, CheckEmail useCase)
+        {
+            var isEmailTaken = await useCase.Handle(email);
+            return Ok(isEmailTaken);
         }
     }
 }

@@ -13,9 +13,3 @@ input.ng-invalid.ng-touched {
 .error-block {
     color: red;
 }
-
-.tooltip {
-    --bs-tooltip-bg: black;
-    --bs-tooltip-color: white;
-    --bs-tooltip-opacity: .8;
-}

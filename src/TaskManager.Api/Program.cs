@@ -8,11 +8,11 @@ using TaskManager.Infrastructure.Configurations;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureApplicationServices();
-builder.Services.ConfigureInfrastructureServices();
+builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => options.CustomSchemaIds(id => id.FullName!.Replace('+', '-')));
 builder.Services.AddCors();
 
 builder.Services.ConfigureOptions<MvcOptionsSetup>();

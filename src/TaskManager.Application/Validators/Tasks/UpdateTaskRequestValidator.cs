@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using TaskManager.Application.Dtos.Tasks;
+using TaskManager.Application.UseCases.Tasks;
 
 namespace TaskManager.Application.Validators.Tasks
 {
-    internal class UpdateTaskRequestValidator : AbstractValidator<UpdateTaskRequest>
+    internal class UpdateTaskRequestValidator : AbstractValidator<UpdateTask.Request>
     {
         public UpdateTaskRequestValidator()
         {

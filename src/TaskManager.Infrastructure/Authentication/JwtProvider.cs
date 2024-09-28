@@ -21,7 +21,7 @@ namespace TaskManager.Infrastructure.Authentication
         {
             var claims = new Claim[]
             {
-                new("user_id", user.Id.ToString()),
+                new("UserId", user.Id.ToString()),
                 new(JwtRegisteredClaimNames.Email, user.Email),
                 new(JwtRegisteredClaimNames.Name, user.UserName)
             };

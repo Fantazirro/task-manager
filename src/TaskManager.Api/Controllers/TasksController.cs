@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TaskManager.Application.Dtos.Tasks;
-using TaskManager.Application.Services;
+using TaskManager.Application.UseCases.Tasks;
+using TaskManager.Infrastructure.Authentication;
 
 namespace TaskManager.Api.Controllers
 {
@@ -11,65 +11,59 @@ namespace TaskManager.Api.Controllers
     [ApiController]  
     public class TasksController : ControllerBase
     {
-        private readonly TaskService _taskService;
         private readonly Guid _userId;
 
-        public TasksController(TaskService taskService, IHttpContextAccessor httpContextAccessor)
+        public TasksController(UserIdProvider userIdProvider)
         {
-            _taskService = taskService;
-
-            var httpContext = httpContextAccessor.HttpContext;
-            _userId = Guid.Parse(httpContext!.User.FindFirst("user_id")!.Value);
+            _userId = (Guid)userIdProvider.GetUserId()!;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id, GetTaskById useCase)
         {
-            var task = await _taskService.GetById(_userId, id);
+            var task = await useCase.Handle(_userId, id);
             if (task is null) return NotFound();
             return Ok(task);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByUserId()
+        public async Task<IActionResult> GetByUserId(GetTasksByUserId useCase)
         {
-            var id = _userId;
-            var tasks = await _taskService.GetByUserId(id);
+            var tasks = await useCase.Handle(new(_userId));
             return Ok(tasks);
         }
 
         [HttpGet("history")]
-        public async Task<IActionResult> GetHistoryByUserId()
+        public async Task<IActionResult> GetHistoryByUserId(GetTaskHistoryByUserId useCase)
         {
-            var id = _userId;
-            var tasks = await _taskService.GetHistoryByUserId(id);
+            var tasks = await useCase.Handle(_userId);
             return Ok(tasks);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] AddTaskRequest addTaskRequest, [FromServices] IValidator<AddTaskRequest> validator)
+        public async Task<IActionResult> Add([FromBody] AddTask.Request request, AddTask useCase, IValidator<AddTask.Request> validator)
         {
-            var validationResult = validator.Validate(addTaskRequest);
+            var validationResult = validator.Validate(request);
             if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
-            var task = await _taskService.Add(_userId, addTaskRequest);
+            var task = await useCase.Handle(_userId, request);
             return Ok(task);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateTaskRequest updateTaskRequest, [FromServices] IValidator<UpdateTaskRequest> validator)
+        public async Task<IActionResult> Update([FromBody] UpdateTask.Request request, UpdateTask useCase, IValidator<UpdateTask.Request> validator)
         {
-            var validationResult = validator.Validate(updateTaskRequest);
+            var validationResult = validator.Validate(request);
             if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
 
-            var task = await _taskService.Update(_userId, updateTaskRequest);
+            var task = await useCase.Handle(_userId, request);
             return Ok(task);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id, DeleteTask useCase)
         {
-            await _taskService.Delete(_userId, id);
+            await useCase.Handle(_userId, id);
             return Ok();
         }
     }
