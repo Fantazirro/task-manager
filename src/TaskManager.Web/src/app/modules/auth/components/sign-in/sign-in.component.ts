@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../../../../shared/services/auth.service';
-import { SignInData } from '../../../../shared/models/auth/sign-in.model';
+import { SignInData } from '../../models/sign-in.model';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-in',

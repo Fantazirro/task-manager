@@ -2,7 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -16,10 +17,10 @@ export class HeaderComponent implements OnDestroy {
     isAuthenticated : boolean = true;
     username?: string;
 
-    constructor(private auth: AuthService, private router: Router) {
+    constructor(private auth: AuthService, private userServise: UserService, private router: Router) {
         this.isAuthenticated = auth.isAuthenticated();
         this.authEvent = auth.onAuthenticated.subscribe(isAuth => this.isAuthenticated = isAuth);
-        this.username = this.auth.getUser()?.userName;
+        this.username = this.userServise.getUser()?.userName;
     }
 
     ngOnDestroy(): void {

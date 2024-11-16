@@ -49,5 +49,21 @@ namespace TaskManager.Api.Controllers
             var isEmailTaken = await useCase.Handle(email);
             return Ok(isEmailTaken);
         }
+
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromQuery] string email, ResetPassword useCase)
+        {
+            var success = await useCase.Handle(email);
+            return success ? Ok() : BadRequest("Пользователя с данной почтой не существует");
+        }
+
+        [HttpPost("confirm-reset")]
+        public async Task<IActionResult> ConfirmResetPassword([FromBody] ConfirmResetPassword.Request request, ConfirmResetPassword useCase)
+        {
+            // сделать валидацию для пароля
+            var success = await useCase.Handle(request);
+            return success ? Ok() : BadRequest("Токен недействителен");
+        }
     }
 }

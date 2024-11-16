@@ -5,7 +5,7 @@ namespace TaskManager.Infrastructure.Services
 {
     public class MemoryCacheService(IMemoryCache memoryCache) : ICacheService
     {
-        public Task<T?> GetAsync<T>(string key)
+        public Task<T> GetAsync<T>(string key)
         {
             return Task.Run(() => memoryCache.Get<T?>(key));
         }

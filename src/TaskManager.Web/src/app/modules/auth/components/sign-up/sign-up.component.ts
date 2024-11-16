@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../../../shared/services/auth.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { SignUpData } from '../../../../shared/models/auth/sign-up.model';
+import { SignUpData } from '../../models/sign-up.model';
 import { SendCodeService } from '../../services/send-code.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',

@@ -6,25 +6,21 @@ using TaskManager.Domain.Common;
 
 namespace TaskManager.Infrastructure.Persistence.Interceptors
 {
-    internal class AuditEntitiesInterceptor : SaveChangesInterceptor
+    internal class AuditEntitiesInterceptor(IHttpContextAccessor httpContextAccessor) : SaveChangesInterceptor
     {
-        private readonly string? _userName;
-
-        public AuditEntitiesInterceptor(IHttpContextAccessor httpContextAccessor)
-        {
-            var httpContext = httpContextAccessor.HttpContext;
-            if (httpContext is not null)
-            {
-                var userNameClaim = httpContext.User.FindFirst(JwtRegisteredClaimNames.Name);
-                _userName = userNameClaim is null ? null : userNameClaim.Value;
-            }
-        }
-
         public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
             DbContextEventData eventData, 
             InterceptionResult<int> result, 
             CancellationToken cancellationToken = default)
         {
+            var modifiedBy = "%SYSTEM%";
+            var httpContext = httpContextAccessor.HttpContext;
+            if (httpContext is not null)
+            {
+                var userNameClaim = httpContext.User.FindFirst(JwtRegisteredClaimNames.Name);
+                modifiedBy = userNameClaim is null ? null : userNameClaim.Value;
+            }
+
             var dbContext = eventData.Context;
             if (dbContext is null)
             {
@@ -37,13 +33,13 @@ namespace TaskManager.Infrastructure.Persistence.Interceptors
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Property(a => a.CreatedBy).CurrentValue = _userName;
+                    entry.Property(a => a.CreatedBy).CurrentValue = modifiedBy;
                     entry.Property(a => a.CreatedOnUtc).CurrentValue = DateTimeOffset.UtcNow;
                 }
 
                 if (entry.State == EntityState.Modified)
                 {
-                    entry.Property(a => a.LastModifiedBy).CurrentValue = _userName;
+                    entry.Property(a => a.LastModifiedBy).CurrentValue = modifiedBy;
                     entry.Property(a => a.LastModifiedOnUtc).CurrentValue = DateTimeOffset.UtcNow;
                 }
             }

@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { SignUpData } from 'src/app/shared/models/auth/sign-up.model';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { SignUpData } from 'src/app/modules/auth/models/sign-up.model';
 import { SendCodeService } from '../../../services/send-code.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-send-code',

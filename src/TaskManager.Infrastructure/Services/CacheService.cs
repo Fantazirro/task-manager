@@ -5,7 +5,7 @@ namespace TaskManager.Infrastructure.Services
 {
     public class CacheService(IMemcachedClient memcachedClient) : ICacheService
     {
-        public async Task<T?> GetAsync<T>(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
             return await memcachedClient.GetValueAsync<T>(key);
         }
