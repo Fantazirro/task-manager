@@ -1,6 +1,6 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskManager.Api.Filters;
 using TaskManager.Application.UseCases.Tasks;
 using TaskManager.Infrastructure.Authentication;
 
@@ -41,21 +41,17 @@ namespace TaskManager.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] AddTask.Request request, AddTask useCase, IValidator<AddTask.Request> validator)
+        [ValidationFilter<AddTask.Request>]
+        public async Task<IActionResult> Add([FromBody] AddTask.Request request, AddTask useCase)
         {
-            var validationResult = validator.Validate(request);
-            if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
-
             var task = await useCase.Handle(_userId, request);
             return Ok(task);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateTask.Request request, UpdateTask useCase, IValidator<UpdateTask.Request> validator)
+        [ValidationFilter<UpdateTask.Request>]
+        public async Task<IActionResult> Update([FromBody] UpdateTask.Request request, UpdateTask useCase)
         {
-            var validationResult = validator.Validate(request);
-            if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
-
             var task = await useCase.Handle(_userId, request);
             return Ok(task);
         }

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using TaskManager.Api.Filters;
 using TaskManager.Application.UseCases.Auth;
 
 namespace TaskManager.Api.Controllers
@@ -9,26 +10,21 @@ namespace TaskManager.Api.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost("sign-in")]
-        public async Task<IActionResult> SignIn([FromBody] SignIn.Request request, SignIn useCase, IValidator<SignIn.Request> validator)
+        [ValidationFilter<SignIn.Request>]
+        public async Task<IActionResult> SignIn([FromBody] SignIn.Request request, SignIn useCase)
         {
-            var validationResult = validator.Validate(request);
-            if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
-
             var signInResponse = await useCase.Handle(request);
             return Ok(signInResponse);
         }
 
         [HttpPost("sign-up")]
+        [ValidationFilter<SignUp.Request>]
         public async Task<IActionResult> SignUp(
             [FromBody] SignUp.Request request,
             [FromQuery] int code,
             SignUp signUpUseCase,
-            ConfirmEmail confirmEmailUseCase,
-            IValidator<SignUp.Request> validator)
+            ConfirmEmail confirmEmailUseCase)
         {
-            var validationResult = validator.Validate(request);
-            if (!validationResult.IsValid) return BadRequest(validationResult.Errors);
-
             var success = await confirmEmailUseCase.Handle(new(request.Email, code));
             if (!success) return BadRequest("Неверный код");
 
