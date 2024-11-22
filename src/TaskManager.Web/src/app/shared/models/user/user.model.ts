@@ -5,6 +5,7 @@ export interface User {
 }
 
 export interface UpdateUser {
-    userName: string,
-    email: string
+    userName?: string,
+    email?: string,
+    password?: string
 }

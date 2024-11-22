@@ -11,7 +11,6 @@ import { AuthService } from '../../services/auth.service';
 })
 export class SignUpComponent {
     signUpForm: FormGroup;
-    isSubmitted: boolean = false;
     isEmailTaken: boolean = false;
 
     signUpData?: SignUpData;

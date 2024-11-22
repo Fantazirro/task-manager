@@ -18,7 +18,6 @@ namespace TaskManager.Application.Configurations
             CreateMap<SignUp.Request, User>();
 
             CreateMap<User, GetUserById.Response>();
-            CreateMap<UpdateUser.Request, User>();
         }
     }
 }

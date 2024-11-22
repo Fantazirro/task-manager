@@ -17,7 +17,7 @@ export class AuthService {
 
     onAuthenticated = new EventEmitter<boolean>();
 
-    constructor(private http: HttpClient, private userServise: UserService) { }
+    constructor(private http: HttpClient) { }
 
     signUp(data: SignUpData, code: string) {
         return this.http.post<JwtResponse>(`${this.url}/sign-up?code=${code}`, data).pipe(
@@ -64,9 +64,12 @@ export class AuthService {
         return localStorage.getItem(this.tokenKey);
     }
 
-    private authenticate(token: string) {
+    createOrUpdateToken(token: string) {
         localStorage.setItem(this.tokenKey, token);
+    }
+
+    private authenticate(token: string) {
+        this.createOrUpdateToken(token);
         this.onAuthenticated.emit(true);
-        this.userServise.getUserFromServer();
     }
 }

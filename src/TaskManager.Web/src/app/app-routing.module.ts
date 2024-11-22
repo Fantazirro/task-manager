@@ -6,6 +6,7 @@ import { SignInComponent } from './modules/auth/components/sign-in/sign-in.compo
 import { TasksMenuComponent } from './modules/tasks/components/tasks-menu/tasks-menu.component';
 import { AuthorizedGuard, NotAuthorizedGuard } from './shared/guards/auth.guard';
 import { ResetPasswordComponent } from './modules/auth/components/reset-password/reset-password.component';
+import { SettingsComponent } from './modules/auth/components/settings/settings.component';
 
 const routes: Routes = [
     { path: '', component: MainComponent, canActivate: [NotAuthorizedGuard] },
@@ -13,6 +14,7 @@ const routes: Routes = [
     { path: 'sign-in', component: SignInComponent, canActivate: [NotAuthorizedGuard] },
     { path: 'reset-password', component: ResetPasswordComponent, canActivate: [NotAuthorizedGuard] },
     { path: 'tasks', component: TasksMenuComponent, canActivate: [AuthorizedGuard] },
+    { path: 'settings', component: SettingsComponent, canActivate: [AuthorizedGuard] },
     { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 

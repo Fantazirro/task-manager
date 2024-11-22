@@ -8,6 +8,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { SendCodeComponent } from './components/sign-up/send-code/send-code.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { RouterModule } from '@angular/router';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { RouterModule } from '@angular/router';
     SignInComponent,
     SendCodeComponent,
     ResetPasswordComponent,
+    SettingsComponent,
   ],
   imports: [
     CommonModule,
