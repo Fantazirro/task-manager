@@ -1,0 +1,29 @@
+<nav class="navbar mt-3">
+    <h2>Задачи</h2>
+    <div class="d-flex">
+        <button class="btn btn-outline-success" type="submit" (click)="addTask()">Новая задача</button>
+    </div>
+</nav>
+<hr class="mt-0" />
+
+<div class="row" style="height: 79vh;">
+    <div class="col gap-4" id="tasks-scroll" style="height: 100%; overflow-y: scroll;">
+        <div class="row">
+            <div class="d-flex flex-column gap-3">
+                <div class="card btn task" *ngFor="let task of tasks; let i = index;" (click)="selectTask(i)">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ task.header }}</h5>
+                    </div>
+                    <div class="btn async-disable p-0 complete-button" (click)="$event.stopImmediatePropagation(); changeTaskStatus(task)">
+                        <div *ngIf="isCompleted(task)">
+                            <svg fill="#00FF00" width="30px" height="30px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <app-selected-task></app-selected-task>
+    </div>
+</div>

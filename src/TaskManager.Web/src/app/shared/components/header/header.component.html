@@ -1,0 +1,19 @@
+<div class="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="/">Task manager</a>
+        <div class="d-flex gap-2" *ngIf="!isAuthenticated">
+            <a routerLink="/sign-in" class="btn btn-primary">Войти</a>
+            <a routerLink="/sign-up" class="btn btn-primary">Создать аккаунт</a>
+        </div>
+        <div class="btn-group" dropdown *ngIf="isAuthenticated">
+            <button id="button-animated" dropdownToggle type="button" class="btn dropdown-toggle"
+                aria-controls="dropdown-animated">{{ username }}<span class="caret"></span>
+            </button>
+            <ul id="dropdown-animated" *dropdownMenu class="dropdown-menu" role="menu"
+                aria-labelledby="button-animated">
+                <li role="menuitem"><a routerLink="/settings" class="dropdown-item">Настройки</a></li>
+                <li role="menuitem"><a routerLink="/" class="dropdown-item" (click)="signOut()">Выйти</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

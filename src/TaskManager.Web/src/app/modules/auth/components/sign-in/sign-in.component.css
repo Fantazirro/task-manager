@@ -1,0 +1,7 @@
+.form-floating > label::after {
+    background-color: transparent;
+}
+
+.error-message {
+    background-color: #660000;
+}

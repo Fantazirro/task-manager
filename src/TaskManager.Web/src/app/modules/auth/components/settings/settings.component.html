@@ -1,0 +1,39 @@
+<div class="card mt-5 mx-auto form-width">
+    <div class="card-body">
+        <form [formGroup]="settingsForm" (submit)="onSubmit()">
+            <legend>Настройки</legend>
+            <div class="alert alert-success mb-3" role="alert" *ngIf="settingsSaved">
+                Настройки сохранены
+            </div>
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" id="username" placeholder="Новое имя" formControlName="username" maxlength="30">
+                <label for="username">Новое имя</label>
+            </div>
+            <div class="mb-3 form-floating">
+                <input type="email" class="form-control" id="email" placeholder="Новый адрес электронной почты" formControlName="email" maxlength="30" (input)="checkEmail()">
+                <label for="email">Новый адрес электронной почты</label>
+                <span *ngIf="!email.valid && email.touched || isEmailTaken" class="error-block">
+                    <span *ngIf="email.hasError('email')">Введён некорректный адрес</span>
+                    <span *ngIf="email.hasError('emailtaken')">Этот адрес электронной почты уже используется</span>
+                </span>
+            </div>
+            <div class="mb-3 form-floating">
+                <input type="password" class="form-control" id="password" placeholder="Пароль" formControlName="password" maxlength="15">
+                <label for="password">Новый пароль</label>
+                <span *ngIf="!password.valid && password.touched" class="error-block">
+                    <span *ngIf="password.hasError('minlength')">Пароль слишком короткий</span>
+                </span>
+            </div>
+            <div class="mb-3 form-floating">
+                <input type="password" class="form-control" id="confirmPassword" placeholder="Пароль" formControlName="confirmPassword" maxlength="15" (input)="matchPassword()">
+                <label for="confirmPassword">Повторите пароль</label>
+                <span *ngIf="!confirmPassword.valid && confirmPassword.touched" class="error-block">
+                    <span *ngIf="confirmPassword.hasError('notmatched')">Пароль не совпадает</span>
+                </span>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary async-disable" [disabled]="isAllEmpty() || !isSettingsValid()">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
