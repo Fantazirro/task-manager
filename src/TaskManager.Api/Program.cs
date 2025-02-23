@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using TaskManager.Api.Configurations;
 using TaskManager.Api.Extensions;
 using TaskManager.Api.Middleware;
+using TaskManager.Api.Helpers;
 using TaskManager.Application.Configurations;
 using TaskManager.Infrastructure.Configurations;
 
@@ -25,6 +26,8 @@ builder.Services.AddExceptionHandler<ExceptionHandlerMiddleware>();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
+
+DatabaseMigrator.ApplyMigration(app.Services);
 
 if (app.Environment.IsDevelopment())
 {

@@ -1,0 +1,55 @@
+networks:
+  task-manager-network:
+    driver: bridge
+
+services:
+  task-manager-api:
+    build:
+      context: .
+      dockerfile: ./src/TaskManager.Api/Dockerfile
+    image: task-manager-api
+    container_name: task-manager-api
+    ports:
+      - 8080:8080
+    networks:
+      - task-manager-network
+    environment:
+      ConnectionStrings:PostgreSqlConnection: Server=task-manager-postgres;Port=5432;Database=task-manager;User Id=postgres;Password=postgres
+      Memcached:Server: task-manager-memcached
+      Memcached:Port: 11211
+    depends_on:
+      - task-manager-postgres
+      - task-manager-memcached
+
+  task-manager-web:
+    build:
+      context: src/TaskManager.Web/
+      dockerfile: Dockerfile
+    image: task-manager-web
+    container_name: task-manager-web
+    ports:
+      - 80:80
+    networks:
+      - task-manager-network
+    depends_on:
+      - task-manager-api
+
+  task-manager-postgres:
+    image: postgres
+    container_name: task-manager-postgres
+    ports:
+      - 5432:5432
+    networks:
+      - task-manager-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: task-manager
+
+  task-manager-memcached:
+    image: memcached
+    container_name: task-manager-memcached
+    ports:
+      - 6379:6379
+    networks:
+      - task-manager-network

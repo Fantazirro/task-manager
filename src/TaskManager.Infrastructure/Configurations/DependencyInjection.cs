@@ -24,8 +24,7 @@ namespace TaskManager.Infrastructure.Configurations
                 var auditInterceptor = serviceProvider.GetService<AuditEntitiesInterceptor>()!;
 
                 options
-                    //.UseNpgsql(Environment.GetEnvironmentVariable("PostgreSqlConnection"))
-                    .UseNpgsql("Host=localhost;Port=5432;Database=task-manager;Username=postgres;Password=postgres")
+                    .UseNpgsql(configuration.GetConnectionString("PostgreSqlConnection"))
                     .UseSnakeCaseNamingConvention()
                     .AddInterceptors(auditInterceptor);
             });
@@ -47,9 +46,11 @@ namespace TaskManager.Infrastructure.Configurations
                     configuration["Email:Password"]);
             services.AddScoped<IEmailSender, EmailSender>();
 
-            //services.AddEnyimMemcached(options => options.Servers.Add(new Server { Address = "localhost", Port = 11211 }));
-            services.AddMemoryCache();
-            services.AddScoped<ICacheService, MemoryCacheService>();
+            var memcachedServer = configuration["Memcached:Server"];
+            var memcachedPort = configuration.GetValue<int>("Memcached:Port");
+
+            services.AddEnyimMemcached(options => options.AddServer(memcachedServer, memcachedPort), true);
+            services.AddScoped<ICacheService, CacheService>();
 
             return services;
         }
